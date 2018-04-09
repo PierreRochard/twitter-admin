@@ -1,0 +1,6 @@
+dateparser
+flask
+flask-admin
+psycopg2
+sqlalchemy
+twython
