@@ -23,18 +23,19 @@ class TwitterUsersModelView(ModelView):
     column_searchable_list = [
         'screen_name',
         'name',
-        'description'
+        'description',
+        'location'
     ]
     column_list = [
         'is_interesting',
         'tags',
         'profile_image_url',
         'screen_name',
+        'following',
         'friends_followers_ratio',
         'name',
         'description',
         'location',
-        'following',
         'created_at',
         'followers_count',
         'friends_count',
