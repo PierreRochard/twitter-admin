@@ -44,4 +44,4 @@ with session_scope() as session:
                   url='/',
                   index_view=TwitterUsersModelView(TwitterUsers, session))
 
-app.run()
+app.run(port=5023)

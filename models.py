@@ -1,9 +1,11 @@
 from sqlalchemy import (
+    BIGINT,
+    Boolean,
     Column,
     DateTime,
-    BIGINT,
+    func,
     String,
-    Boolean)
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,6 +14,15 @@ Base = declarative_base()
 
 class TwitterUsers(Base):
     __tablename__ = 'twitter_users'
+
+    record_created_at = Column(DateTime(timezone=True),
+                               nullable=False,
+                               server_default=func.now())
+
+    record_updated_at = Column(DateTime(timezone=True),
+                               nullable=False,
+                               onupdate=func.now(),
+                               server_default=func.now())
 
     blocked_by = Column(Boolean, nullable=True)
     blocking = Column(Boolean, nullable=True)
