@@ -7,8 +7,8 @@ import time
 from sqlalchemy.orm.exc import NoResultFound
 from twython import Twython, TwythonRateLimitError
 
-from database import session_scope, create_database
-from models import TwitterUsers
+from twitter_followers.database import session_scope, create_database
+from twitter_followers.models import TwitterUsers
 
 logging.basicConfig(
     level=logging.INFO,
@@ -17,7 +17,7 @@ logging.basicConfig(
 )
 
 
-class TwitterFollowers(object):
+class Followers(object):
     data_path = 'followers'
 
     def __init__(self):
@@ -67,7 +67,9 @@ class TwitterFollowers(object):
     def upsert_followers(self):
         self.load_json_files()
         for index, follower in enumerate(self.followers):
-            print(round(index / len(self.followers), 4) * 100)
+            percent_done = round(index / len(self.followers)*100, 2)
+            if not index % 50:
+                logging.info(f'Upserted {percent_done}% of followers')
             self.upsert_follower(follower)
 
     @staticmethod
@@ -93,6 +95,6 @@ class TwitterFollowers(object):
 
 if __name__ == '__main__':
     create_database()
-    tf = TwitterFollowers()
+    tf = Followers()
     tf.upsert_followers()
     tf.sync_data()

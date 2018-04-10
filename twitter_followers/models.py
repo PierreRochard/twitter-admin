@@ -5,11 +5,29 @@ from sqlalchemy import (
     DateTime,
     func,
     String,
-)
+    ForeignKey)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
+
+
+class Tags(Base):
+    __tablename__ = 'tags'
+    id = Column(BIGINT, primary_key=True)
+    name = Column(String)
+
+    def __str__(self):
+        return self.name
+
+
+class TwitterUsersTags(Base):
+    __tablename__ = 'twitter_users_tags'
+    id = Column(BIGINT, primary_key=True)
+    twitter_user_id = Column(BIGINT, ForeignKey('twitter_users.id'))
+    tag_id = Column(BIGINT, ForeignKey('tags.id'))
 
 
 class TwitterUsers(Base):
@@ -23,6 +41,18 @@ class TwitterUsers(Base):
                                nullable=False,
                                onupdate=func.now(),
                                server_default=func.now())
+
+    is_interesting = Column(Boolean, nullable=True)
+    notes = Column(String)
+    tags = relationship('Tags', secondary='twitter_users_tags')
+
+    @hybrid_property
+    def friends_followers_ratio(self):
+        return round(self.friends_count / max(self.followers_count, 1), 2)
+
+    @friends_followers_ratio.expression
+    def friends_followers_ratio(cls):
+        return func.round(cls.friends_count / func.max(cls.followers_count), 2)
 
     blocked_by = Column(Boolean, nullable=True)
     blocking = Column(Boolean, nullable=True)

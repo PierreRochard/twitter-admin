@@ -6,7 +6,7 @@ from sqlalchemy.engine.url import URL
 from sqlalchemy.exc import IntegrityError, ProgrammingError
 from sqlalchemy.orm import sessionmaker
 
-from models import Base
+from twitter_followers.models import Base
 
 
 @contextmanager
