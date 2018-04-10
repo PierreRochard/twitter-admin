@@ -53,6 +53,7 @@ class TwitterUsersModelView(ModelView):
         screen_name=screen_name_formatter,
         profile_image_url=image_formatter
     )
+    column_default_sort = ('followers_count', True)
 
 
 if __name__ == '__main__':
