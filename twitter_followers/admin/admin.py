@@ -3,7 +3,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 from twitter_followers.admin.formatters import screen_name_formatter, \
-    image_formatter
+    image_formatter, url_formatter
 from twitter_followers.database import session_scope
 from twitter_followers.models import TwitterUsers, Tags
 
@@ -42,6 +42,7 @@ class TwitterUsersModelView(ModelView):
         'statuses_count',
         'favourites_count',
         'lang',
+        'url'
     ]
     column_filters = [c for c in column_list if not c.endswith('_ratio')]
     column_editable_list = [
@@ -51,7 +52,8 @@ class TwitterUsersModelView(ModelView):
 
     column_formatters = dict(
         screen_name=screen_name_formatter,
-        profile_image_url=image_formatter
+        profile_image_url=image_formatter,
+        url=url_formatter
     )
     column_default_sort = ('followers_count', True)
 
@@ -68,4 +70,4 @@ if __name__ == '__main__':
                       url='/',
                       index_view=TwitterUsersModelView(TwitterUsers, session))
         admin.add_view(ModelView(Tags, session))
-    app.run(port=5023)
+    app.run(port=5024)
