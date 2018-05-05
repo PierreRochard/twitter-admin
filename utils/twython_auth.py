@@ -1,5 +1,7 @@
 from twython import Twython
 
+print('Go to https://apps.twitter.com/ and create an API key')
+
 api_key = input('Enter your API key: ')
 api_secret = input('Enter your API secret:')
 
@@ -15,5 +17,7 @@ twitter = Twython(api_key,
                   auth['oauth_token'],
                   auth['oauth_token_secret'])
 final_step = twitter.get_authorized_tokens(oauth_verifier)
-print('oauth_token', final_step['oauth_token'])
-print('oauth_token_secret', final_step['oauth_token_secret'])
+print('export TWITTER_APP_KEY="{api_key}"'.format(api_key=api_key))
+print('export TWITTER_APP_SECRET="{api_secret}"'.format(api_secret=api_secret))
+print('export TWITTER_OAUTH_TOKEN="{oauth_token}"'.format(oauth_token=final_step['oauth_token']))
+print('export TWITTER_OAUTH_TOKEN_SECRET="{oauth_token_secret}"'.format(oauth_token_secret=final_step['oauth_token_secret']))
