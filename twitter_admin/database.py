@@ -1,12 +1,15 @@
 from contextlib import contextmanager
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.exc import IntegrityError, ProgrammingError
 from sqlalchemy.orm import sessionmaker
 
-from twitter_followers.models import Base
+from twitter_admin.models import Base
+
+load_dotenv()
 
 
 @contextmanager
@@ -15,7 +18,7 @@ def session_scope(
         password=os.environ['PGPASSWORD'],
         host=os.environ['PGHOST'],
         port=os.environ['PGPORT'],
-        database=os.environ['PGDATABASE'],
+        database=os.environ['PGDB'],
         echo=False,
         raise_integrity_error=True,
         raise_programming_error=True
@@ -31,8 +34,7 @@ def session_scope(
     )
 
     engine = create_engine(postgres_url,
-                           echo=echo,
-                           connect_args={'sslmode': 'require'}
+                           echo=echo
                            )
     session_maker = sessionmaker(bind=engine)
     session = session_maker()

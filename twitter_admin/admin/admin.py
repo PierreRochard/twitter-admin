@@ -1,11 +1,7 @@
-from flask import Flask
-from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
-from twitter_followers.admin.formatters import screen_name_formatter, \
-    image_formatter, url_formatter
-from twitter_followers.database import session_scope
-from twitter_followers.models import TwitterUsers, Tags
+from twitter_admin.admin.formatters import image_formatter, \
+    screen_name_formatter, url_formatter
 
 
 class TwitterUsersModelView(ModelView):
@@ -56,18 +52,3 @@ class TwitterUsersModelView(ModelView):
         url=url_formatter
     )
     column_default_sort = ('followers_count', True)
-
-
-if __name__ == '__main__':
-    app = Flask(__name__)
-    app.debug = True
-    app.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
-    app.secret_key = 'aS2MPk5uGu8PnTFLAK'
-    with session_scope() as session:
-        admin = Admin(app,
-                      name='Admin',
-                      template_mode='bootstrap3',
-                      url='/',
-                      index_view=TwitterUsersModelView(TwitterUsers, session))
-        admin.add_view(ModelView(Tags, session))
-    app.run(port=5024)

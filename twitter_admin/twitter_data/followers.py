@@ -1,14 +1,15 @@
-from datetime import datetime
 import json
 import logging
 import os
 import time
+from datetime import datetime
 
 from sqlalchemy.orm.exc import NoResultFound
-from twython import Twython, TwythonRateLimitError
+from twython import TwythonRateLimitError
 
-from twitter_followers.database import session_scope, create_database
-from twitter_followers.models import TwitterUsers
+from twitter_admin.database import create_database, session_scope
+from twitter_admin.models import TwitterUsers
+from twitter_admin.twitter_data.twitter_api import TwitterAPI
 
 logging.basicConfig(
     level=logging.INFO,
@@ -17,15 +18,11 @@ logging.basicConfig(
 )
 
 
-class Followers(object):
+class Followers(TwitterAPI):
     data_path = 'followers'
 
     def __init__(self):
-        self.twitter = Twython(os.environ['TWITTER_APP_KEY'],
-                               os.environ['TWITTER_APP_SECRET'],
-                               os.environ['TWITTER_OAUTH_TOKEN'],
-                               os.environ['TWITTER_OAUTH_TOKEN_SECRET']
-                               )
+        super().__init__()
         self.cursor = -1
         if not os.path.exists(self.data_path):
             os.makedirs(self.data_path)

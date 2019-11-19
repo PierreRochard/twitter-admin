@@ -2,5 +2,6 @@ dateparser
 flask
 flask-admin
 psycopg2
+python-dotenv
 sqlalchemy
 twython
